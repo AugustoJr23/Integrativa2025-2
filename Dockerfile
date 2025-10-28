@@ -1,22 +1,24 @@
-# Dockerfile Corrigido (v2)
+# Dockerfile Corrigido (v4)
 FROM node:18-alpine
 
-# Define o diretório de trabalho principal
+# 1. Instala as ferramentas de build (python, make, g++)
+# Necessário para compilar dependências nativas (ex: socket.io)
+RUN apk add --no-cache python3 make g++
+
+# 2. Define o diretório de trabalho
 WORKDIR /app
 
-# 1. Copia TODO o repositório para dentro do contêiner
-# Teremos /app/index.html, /app/backend/server.js, etc.
-COPY . .
+# 3. Copia o package.json (da raiz)
+COPY package*.json ./
 
-# 2. Muda o diretório de trabalho para a pasta do backend
-WORKDIR /app/backend
-
-# 3. Instala as dependências (ele vai encontrar /app/backend/package.json)
+# 4. Instala as dependências
 RUN npm install --production
 
-# 4. Expõe a porta
+# 5. Copia todo o restante do projeto
+COPY . .
+
+# 6. Expõe a porta
 EXPOSE 3000
 
-# 5. Inicia o servidor DE DENTRO da pasta backend
-# O __dirname será /app/backend, e o '../' vai para /app (onde está o index.html)
-CMD ["node", "server.js"]
+# 7. Comando para iniciar o servidor (que está na pasta backend)
+CMD ["node", "backend/server.js"]
