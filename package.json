@@ -1,0 +1,25 @@
+{
+  "name": "integrativa2025-2",
+  "version": "1.0.0",
+  "description": "O **Ponto Focal** é uma aplicação web omnicanal que integra **WhatsApp**, **Instagram**, **E-mail** e **Chat Web** em uma única plataforma de atendimento, potencializada por **Inteligência Artificial** para automação inteligente do suporte ao cliente.",
+  "homepage": "https://github.com/AugustoJr23/Integrativa2025-2#readme",
+  "bugs": {
+    "url": "https://github.com/AugustoJr23/Integrativa2025-2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AugustoJr23/Integrativa2025-2.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
