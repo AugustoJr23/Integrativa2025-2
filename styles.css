@@ -1,0 +1,2196 @@
+/**
+ * YGGHUB - Estilos do Painel Omnicanal
+ * 
+ * Stylesheet responsivo para interface de atendimento moderna:
+ * - Layout flexível adaptável a diferentes telas
+ * - Paleta de cores verde profissional (#1B5E20, #2E7D32, #A5D6A7)
+ * - Estados visuais para diferentes status de tickets
+ * - Design limpo e moderno com fonte Poppins
+ * 
+ * ALTERAÇÕES PRINCIPAIS:
+ * - Nova paleta verde YggHub implementada via variáveis CSS
+ * - Fonte alterada de Inter para Poppins (mais arredondada)
+ * - Cores atualizadas para verde, branco e cinza leve
+ * - Nome do projeto atualizado de "Integrativa" para "YggHub"
+ */
+
+/* ============================================================================
+   YGGHUB - VARIÁVEIS CSS GLOBAIS
+   ============================================================================
+   PALETA DE CORES CONFORME ESPECIFICAÇÃO:
+   - Verde principal (#1B5E20): Logo, botões primários, status online, elementos ativos
+   - Verde médio (#2E7D32): Hovers e estados de foco
+   - Verde claro (#A5D6A7): Ícones secundários, fundos suaves de tags
+   - Fundo branco (#FFFFFF): Background principal mantendo leveza
+   - Textos escuros (#1A1A1A): Garantindo contraste e legibilidade
+   ============================================================================ */
+
+:root {
+    /* ===== CORES YGGHUB - AJUSTADAS CONFORME SOLICITAÇÃO ===== */
+    --primary-green: #2E7D32;          /* Header e botões principais - verde principal solicitado */
+    --secondary-green: #388E3C;        /* Gradiente complementar */
+    --dark-green: #1B5E20;            /* Verde mais escuro para contrastes */
+    --accent-green: #A5D6A7;           /* Ícones secundários, tags WhatsApp e backgrounds suaves */
+    --light-green: #E8F5E9;            /* Mensagens enviadas - verde suave */
+    --border-green: #C8E6C9;           /* Bordas sutis das mensagens recebidas */
+    
+    /* ===== CORES NEUTRAS - FUNDO BRANCO E CONTRASTE ===== */
+    --white: #FFFFFF;                  /* Background principal - mantendo leveza */
+    --text-dark: #1A1A1A;             /* Textos principais - garantindo legibilidade */
+    --text-secondary: #6C757D;        /* Textos secundários */
+    --border-light: #E0E0E0;          /* Bordas sutis */
+    --gray-light: #F8F9FA;            /* Backgrounds alternativos sutis */
+    
+    /* ===== SOMBRAS LEVES E ELEGANTES ===== */
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);        /* Sombra suave para cards */
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.1);         /* Sombra para cards principais */
+    --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.12);       /* Sombra para hover */
+    
+    /* ===== BORDAS ARREDONDADAS - 8px CONFORME ESPECIFICAÇÃO ===== */
+    --radius-small: 4px;               /* Bordas muito pequenas */
+    --radius-card: 8px;                /* Bordas padrão cards - conforme especificação */
+    --radius-button: 8px;              /* Bordas botões - conforme especificação */
+    --radius-large: 12px;              /* Bordas grandes */
+    
+    /* ===== TRANSIÇÕES SUAVES ===== */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* ===== BREAKPOINTS RESPONSIVOS ===== */
+    --mobile-max: 768px;
+    --tablet-max: 1024px;
+    --desktop-min: 1025px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================================
+   ESTILOS GERAIS YGGHUB
+   ============================================================================ */
+
+body {
+    /* FONTE PRINCIPAL: Poppins com fallbacks profissionais */
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+    /* BACKGROUND: Branco puro mantendo leveza conforme especificação */
+    background-color: var(--white);
+    height: 100vh;
+    overflow: hidden;
+    /* TEXTO: Escuro para garantir contraste e legibilidade */
+    color: var(--text-dark);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   LAYOUT PRINCIPAL - RESPONSIVO YGGHUB
+   ============================================================================
+   DESKTOP: Sidebar (300px) + Chat (flex) + Info (320px)
+   MOBILE: Apenas Chat (sidebar e info ficam ocultas ou sobrepostas)
+   ============================================================================ */
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr 320px;
+            grid-template-rows: 70px 1fr;
+            height: 100vh;
+            max-height: 100vh;
+            gap: 0;
+            transition: var(--transition);
+            /* CORREÇÃO: Evitar overflow no layout */
+            overflow: hidden;
+        }
+
+        /* ===== RESPONSIVIDADE: TABLETS (1024px) ===== */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 280px 1fr 260px;
+            }
+        }
+
+        /* ===== RESPONSIVIDADE: MOBILE (768px) - COLUNA LATERAL RECOLHE ===== */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header"
+                    "main";
+            }
+            
+            /* MOBILE: Sidebar de contatos recolhe quando chat estiver aberto */
+            .conversations-sidebar,
+            .client-info-sidebar {
+                display: none;
+            }
+            
+            /* MOBILE: Ajustar header */
+            .header {
+                padding: 0 16px;
+            }
+            
+            .logo {
+                font-size: 20px;
+                margin-right: 16px;
+            }
+            
+            .search-bar {
+                max-width: 300px;
+            }
+            
+            /* MOBILE: Botões menores */
+            .header-icon {
+                width: 38px;
+                height: 38px;
+            }
+            
+            /* MOBILE: Mensagens mais estreitas */
+            .message-content {
+                max-width: 85%;
+                padding: 12px 16px;
+            }
+        }
+
+        /* RESPONSIVIDADE: Tablets pequenos */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 12px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+            
+            .header-actions {
+                gap: 8px;
+            }
+            
+            .floating-btn {
+                bottom: 16px;
+                right: 16px;
+                width: 46px;
+                height: 46px;
+            }
+        }
+
+/* ============================================================================
+   HEADER YGGHUB - VERDE PRINCIPAL COM SOMBRA MODERNA
+   ============================================================================ */
+
+        .header {
+            grid-column: 1 / -1;
+            /* AJUSTE: Header com gradiente entre #1B5E20 e #388E3C conforme solicitado */
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--secondary-green) 100%);
+            border: none; /* Remove borda para visual mais limpo */
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            /* SOMBRA MODERNA: Mais sutil e profissional */
+            box-shadow: var(--shadow-medium);
+            z-index: 10;
+        }
+
+        /* LOGO YGGHUB - Branco sobre verde para contraste */
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white); /* Branco sobre fundo verde */
+            margin-right: 40px;
+            transition: var(--transition);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sombra sutil no texto */
+        }
+
+        .logo:hover {
+            color: var(--accent-green); /* Verde claro no hover */
+            transform: scale(1.02); /* Leve aumento no hover */
+        }
+
+        .logo i {
+            margin-right: 8px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+
+/* ============================================================================
+   BARRA DE PESQUISA - ADAPTADA PARA HEADER VERDE
+   ============================================================================ */
+
+        .search-bar {
+            flex: 1;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid rgba(255,255,255,0.2); /* Borda transparente branca */
+            border-radius: var(--radius-large);
+            font-size: 14px;
+            /* BACKGROUND TRANSLÚCIDO: Funciona bem sobre verde */
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255,255,255,0.8); /* Placeholder branco translúcido */
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            background: var(--white);
+            color: var(--dark-gray);
+            border-color: var(--white);
+            box-shadow: var(--shadow-light);
+        }
+
+        .search-bar input:focus::placeholder {
+            color: var(--medium-gray);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.8); /* Ícone branco translúcido */
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus + i,
+        .search-bar:has(input:focus) i {
+            color: var(--primary-green); /* Verde quando focado */
+        }
+
+/* ============================================================================
+   AÇÕES DO HEADER - ADAPTADAS PARA FUNDO VERDE
+   ============================================================================ */
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        /* STATUS INDICATOR - Verde claro sobre verde escuro */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2); /* Fundo translúcido */
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            color: var(--white);
+            font-weight: 500;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: var(--transition);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green); /* Verde claro para contraste */
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(165, 214, 167, 0.6);
+        }
+
+        /* ÍCONES DO HEADER - Brancos sobre verde */
+        .header-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header-icon:hover {
+            background: rgba(255,255,255,0.25);
+            color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        /* BADGE DE NOTIFICAÇÃO - Vermelho para destaque */
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background: #FF4757;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+/* ============================================================================
+   SIDEBAR DE CONVERSAS - DESIGN MODERNO YGGHUB
+   ============================================================================ */
+
+        .conversations-sidebar {
+            background: var(--white);
+            /* CORREÇÃO: Borda mais sutil e profissional */
+            border-right: 2px solid var(--gray-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            /* SOMBRA PROFISSIONAL: Separação elegante sem exageros */
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .conversations-header {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
+        }
+
+        .conversations-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-green); /* Título em verde principal */
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .conversations-title::before {
+            content: "💬";
+            font-size: 16px;
+        }
+
+        .conversations-search {
+            position: relative;
+        }
+
+        .conversations-search input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #f9fafb;
+        }
+
+        .conversations-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            /* PADDING MELHORADO: Respiro interno conforme especificação */
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+            /* BORDAS ARREDONDADAS: 8px conforme especificação */
+            border-radius: var(--radius-card);
+            margin-bottom: 8px;
+            /* SOMBRA LEVE: Conforme especificação */
+            box-shadow: var(--shadow-light);
+            position: relative;
+        }
+
+        .conversation-item:hover {
+            /* HOVER: Verde médio conforme especificação */
+            background: rgba(46, 125, 50, 0.05);
+            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
+        }
+
+        .conversation-item.active {
+            background: var(--white);
+            /* ELEMENTO ATIVO: Verde principal conforme especificação */
+            border-left: 4px solid var(--primary-green);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .conversation-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            margin-right: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .conversation-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        /* STATUS ONLINE: Verde principal conforme especificação */
+        .status-online {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .status-offline {
+            background: var(--medium-gray);
+        }
+
+        .status-away {
+            background: #f59e0b;
+        }
+
+        .conversation-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark-gray);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-preview {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--medium-gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-channel {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+
+        .conversation-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .conversation-time {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        .unread-badge {
+            /* BADGE NÃO LIDO: Verde principal conforme especificação */
+            background: var(--primary-green);
+            color: var(--white);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* ===== ÁREA PRINCIPAL DO CHAT - ESTRUTURA FIXA CORRIGIDA ===== */
+        .chat-area {
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            /* CORREÇÃO: Altura calculada removendo o header */
+            height: calc(100vh - 70px);
+            max-height: calc(100vh - 70px);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            /* CORREÇÃO: Altura fixa para controlar melhor o layout */
+            flex-shrink: 0;
+            height: 80px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+        }
+
+        .chat-client-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Avatar do cliente - ALTERAÇÃO: Verde YggHub */
+        .client-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .client-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .client-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .active-channels {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .mini-channel-badge {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 500;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Botões de ação - ALTERAÇÃO: Cores YggHub */
+        .action-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--dark-gray);
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            border-color: var(--secondary-green);
+            background: var(--light-green);
+            color: var(--primary-green);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* ===== CONTAINER DE MENSAGENS - ALTURA AJUSTADA PARA INPUT FIXO ===== */
+        .chat-messages {
+            /* CORREÇÃO: Altura calculada considerando header (80px) e input fixo (80px) */
+            height: calc(100vh - 230px);
+            max-height: calc(100vh - 230px);
+            padding: 24px;
+            /* PADDING BOTTOM: Espaço para o input fixo não sobrepor mensagens */
+            padding-bottom: 24px;
+            /* SCROLL FUNCIONAL: overflow-y auto com altura fixa */
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            /* SCROLL SUAVE: Comportamento fluido */
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+        }
+
+        /* SCROLLBAR PERSONALIZADA: Estilo moderno e discreto */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--accent-green);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-green);
+        }
+
+        .load-history-btn {
+            align-self: center;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #6b7280;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .load-history-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .attendant-change {
+            text-align: center;
+            padding: 12px;
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #92400e;
+            margin: 16px 0;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            position: relative;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.sent {
+            flex-direction: row-reverse;
+        }
+
+/* ============================================================================
+   BALÕES DE MENSAGEM - CORES HARMONIZADAS CONFORME SOLICITADO
+   ============================================================================ 
+   CORREÇÃO IMPLEMENTADA:
+   - Balões mantêm verde principal e verde claro (conforme solicitado)
+   - Tags internas têm cores específicas por plataforma (sem interferir no balão)
+   - Contraste harmonioso entre balão e conteúdo
+   ============================================================================ */
+
+        .message-content {
+            max-width: 70%;
+            /* MENSAGENS RECEBIDAS: Branco com borda sutil conforme solicitado */
+            background: var(--white);
+            border: 1px solid var(--border-green);
+            border-radius: var(--radius-large);
+            padding: 14px 18px;
+            position: relative;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+        }
+
+        .message-content:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-card);
+        }
+
+        /* MENSAGENS ENVIADAS: Verde suave conforme solicitado */
+        .message.sent .message-content {
+            background: var(--light-green);
+            color: var(--text-dark);
+            border-color: var(--border-green);
+            /* VISUAL: Sem gradiente, fundo sólido mais limpo */
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+/* ============================================================================
+   BADGES DE CANAL - HARMONIZADOS COM PALETA YGGHUB
+   ============================================================================ */
+
+        .channel-badge {
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ===== TAGS INTERNAS DOS BALÕES - CORES CORRIGIDAS CONFORME SOLICITADO ===== */
+        
+        /* WHATSAPP: Fundo verde suave (#E8F5E9) com texto verde escuro (#1B5E20) */
+        .whatsapp { 
+            background: #E8F5E9 !important;
+            color: #1B5E20 !important;
+            border: 1px solid #A5D6A7;
+            font-weight: 600;
+        }
+        
+        /* E-MAIL: Fundo azul claro (#E3F2FD) com texto azul escuro (#0D47A1) */
+        .email { 
+            background: #E3F2FD !important;
+            color: #0D47A1 !important;
+            border: 1px solid #90CAF9;
+        }
+        
+        /* INSTAGRAM: Mantém identidade própria */
+        .instagram { 
+            background: #FCE4EC !important;
+            color: #8E24AA !important;
+            border: 1px solid #CE93D8;
+        }
+        
+        /* CHAT WEB: Fundo roxo claro (#F3E5F5) com texto roxo escuro (#6A1B9A) */
+        .webchat { 
+            background: #F3E5F5 !important;
+            color: #6A1B9A !important;
+            border: 1px solid #CE93D8;
+        }
+
+        /* ===== ÍCONES E EMOJIS - CONTRASTE ADEQUADO ===== */
+        .channel-badge i {
+            /* CORREÇÃO: Garantir contraste adequado para ícones */
+            filter: none;
+            opacity: 1;
+        }
+
+        .message-content i,
+        .message-header i {
+            /* CORREÇÃO: Ícones em fundos neutros com contraste */
+            background: transparent;
+            color: inherit;
+        }
+
+        /* EMOJIS: Manter tamanho e contraste naturais */
+        .message-content .emoji,
+        .message-text .emoji {
+            font-size: 1.2em;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+/* ============================================================================
+   RESUMO DAS CORREÇÕES IMPLEMENTADAS - YGGHUB PROFISSIONAL
+   ============================================================================
+   
+   ✅ ESTRUTURA DO CHAT CORRIGIDA:
+   - chat-area: height: 100vh para controle total do layout
+   - chat-messages: flex: 1 com overflow-y: auto para scroll funcional
+   - chat-input: flex-shrink: 0 para ficar fixo no rodapé
+   
+   ✅ CORES AJUSTADAS CONFORME SOLICITAÇÃO:
+   - Header: gradiente entre #1B5E20 e #388E3C
+   - Botões primários: verde #2E7D32
+   - Mensagens enviadas: verde suave #E8F5E9
+   - Mensagens recebidas: branco #FFFFFF com borda #C8E6C9
+   
+   ✅ TAGS DE CANAL PRESERVADAS:
+   - WhatsApp, E-mail, Chat Web, Instagram mantêm cores originais
+   - Emojis e ícones com contraste adequado
+   
+   ✅ SEPARAÇÃO PROFISSIONAL:
+   - Removida barra verde exagerada
+   - Borda sutil com sombra elegante
+   - Visual limpo e corporativo
+   
+   ✅ INPUT COMPLETAMENTE FIXO:
+   - position: absolute no rodapé da chat-area
+   - Altura fixa de 80px calculada
+   - Não se move com novas mensagens
+   - Z-index 10 para ficar sempre visível
+   
+   ✅ LAYOUT CALCULADO PRECISAMENTE:
+   - chat-messages com altura calc(100vh - 230px)
+   - chat-header com altura fixa de 80px
+   - Scroll funcional sem quebras
+   - Responsividade mantida
+   ============================================================================ */
+
+        .message-time {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .message.sent .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* ===== ÁREA DE INPUT - COMPLETAMENTE FIXA NO RODAPÉ ===== */
+        .chat-input {
+            /* CORREÇÃO: Posição fixa no rodapé da chat-area */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-light);
+            background: var(--white);
+            /* VISUAL: Sombra para separar da área de mensagens */
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 12px 16px;
+            /* CORREÇÃO: Altura fixa para melhor controle */
+            height: 48px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .channel-selector {
+            position: relative;
+            margin-right: 8px;
+        }
+
+        .channel-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-width: 90px;
+        }
+
+        .channel-dropdown:hover {
+            background: #e5e7eb;
+        }
+
+        .channel-dropdown.whatsapp { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+        .channel-dropdown.email { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+        .channel-dropdown.webchat { background: #f3e8ff; color: #7c3aed; border-color: #e9d5ff; }
+        .channel-dropdown.instagram { background: #fce7f3; color: #be185d; border-color: #f9a8d4; }
+
+        .channel-options {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-bottom: 8px;
+            display: none;
+        }
+
+        .channel-options.show {
+            display: block;
+        }
+
+        .channel-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .channel-option:hover {
+            background: #f3f4f6;
+        }
+
+        .channel-option:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .channel-option:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .channel-transition {
+            text-align: center;
+            padding: 8px;
+            margin: 12px 0;
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #0c4a6e;
+            font-style: italic;
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 8px 0;
+            resize: none;
+            max-height: 120px;
+            min-height: 20px;
+            font-family: inherit;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+/* ============================================================================
+   BOTÕES DE INPUT - DESIGN YGGHUB
+   ============================================================================ */
+
+        .input-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: var(--radius-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-gray);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .input-btn:hover {
+            background: var(--light-green);
+            color: var(--secondary-green);
+            transform: translateY(-1px);
+        }
+
+        /* ===== BOTÃO ENVIAR - VERDE PROFISSIONAL CONFORME SOLICITADO ===== */
+        .send-btn {
+            background: var(--primary-green) !important;
+            color: var(--white) !important;
+            border: none;
+            border-radius: var(--radius-button);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+        }
+
+        .send-btn:hover {
+            background: var(--secondary-green) !important;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+        }
+
+        /* Customer Panel */
+        .customer-panel {
+            background: white;
+            border-left: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .customer-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .customer-info {
+            text-align: center;
+        }
+
+        .customer-avatar {
+            width: 60px;
+            height: 60px;
+            /* AVATAR: Verde principal conforme especificação */
+            background: var(--primary-green);
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .customer-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .customer-details {
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            /* TAB ATIVA: Verde principal conforme especificação */
+            color: var(--primary-green);
+            border-bottom-color: var(--primary-green);
+        }
+
+        .tab-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .history-date {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .history-summary {
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 12px;
+            resize: vertical;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .kpi-card {
+            padding: 16px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .kpi-value {
+            font-size: 20px;
+            font-weight: 700;
+            /* KPI: Verde principal conforme especificação */
+            color: var(--primary-green);
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 10px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Modal Diferenciais - ALTERAÇÃO: Estilo YggHub */
+        .differentials {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-medium);
+            transform: translateY(100%);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .differentials.show {
+            transform: translateY(0);
+        }
+
+        .differentials-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        /* Título dos diferenciais - ALTERAÇÃO: Verde YggHub */
+        .differentials-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--medium-gray);
+            padding: 4px;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--primary-green);
+        }
+
+        .differentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        /* Itens dos diferenciais - ALTERAÇÃO: Background YggHub */
+        .differential-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background: var(--light-green);
+        }
+
+        /* Ícones dos diferenciais - ALTERAÇÃO: Verde YggHub */
+        .differential-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 10px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .differential-text {
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .differential-title {
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 2px;
+        }
+
+        .differential-desc {
+            color: var(--medium-gray);
+        }
+
+        /* Botão flutuante - ALTERAÇÃO: Verde YggHub */
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            background: var(--secondary-green);
+            box-shadow: 0 6px 16px rgba(27, 94, 32, 0.4);
+        }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        /* Tooltips - ALTERAÇÃO: Cores YggHub */
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 4px;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            /* LOADING: Verde principal conforme especificação */
+            border-top-color: var(--primary-green);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+/* ============================================================================
+   RESPONSIVIDADE APRIMORADA - CONFORME ESPECIFICAÇÃO
+   ============================================================================
+   Testado para larguras de 320px até 1024px
+   ============================================================================ */
+
+        /* ===== TABLETS GRANDES (1024px) ===== */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 280px 1fr 260px;
+            }
+            
+            /* HEADER: Fixo e bem centralizado conforme especificação */
+            .header {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            
+            .search-bar {
+                max-width: 300px;
+            }
+        }
+
+        /* ===== MOBILE (768px) - OCULTAR SIDEBAR CONFORME SOLICITADO ===== */
+        @media (max-width: 768px) {
+            .container {
+                /* LAYOUT MÓVEL: Apenas área de chat visível */
+                grid-template-columns: 1fr;
+                grid-template-rows: 70px 1fr;
+            }
+            
+            /* SIDEBAR: Completamente oculta em mobile conforme solicitação */
+            .conversations-sidebar {
+                display: none;
+            }
+            
+            /* PAINEL CLIENTE: Fica abaixo do chat conforme especificação */
+            .customer-panel {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 40vh;
+                /* INICIALMENTE OCULTO: Pode ser ativado via JavaScript */
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+                z-index: 40;
+                /* GARANTIR FUNCIONAMENTO: Background e bordas */
+                background: var(--white);
+                border-top: 2px solid var(--border-light);
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+            }
+            
+            /* HEADER: Fixo e centralizado conforme especificação */
+            .header {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 100;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+        }
+
+        /* ===== MOBILE PEQUENO (480px) - ESPAÇAMENTOS FUNCIONAIS ===== */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 12px;
+            }
+            
+            /* CHAT MOBILE: Garantir rolagem funcional */
+            .chat-messages {
+                padding: 16px 12px;
+                /* SCROLL MÓVEL: Comportamento otimizado para touch */
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+            }
+            
+            .conversation-item {
+                padding: 12px 16px;
+                margin-bottom: 6px;
+            }
+            
+            .message-content {
+                max-width: 92%;
+                padding: 12px 16px;
+            }
+            
+            /* ÁREA DE INPUT: Espaçamento melhorado */
+            .chat-input {
+                padding: 12px;
+            }
+            
+            .input-container {
+                padding: 8px 12px;
+                padding: 12px 16px;
+            }
+            
+            .search-bar {
+                max-width: 150px;
+            }
+        }
+
+        /* ===== MOBILE EXTRA PEQUENO (320px) ===== */
+        @media (max-width: 320px) {
+            .header {
+                padding: 0 8px;
+            }
+            
+            .logo {
+                font-size: 18px;
+                margin-right: 20px;
+            }
+            
+            .search-bar {
+                max-width: 120px;
+            }
+            
+            .conversation-item {
+                padding: 10px 12px;
+            }
+        }
+
+/* ============================================================================
+   ESTILOS GERAIS PARA BOTÕES E CARDS - CONFORME ESPECIFICAÇÃO
+   ============================================================================
+   Bordas arredondadas de 8px e sombras leves em cards e botões
+   ============================================================================ */
+
+        /* BOTÕES PRIMÁRIOS: Verde principal com bordas e sombras */
+        button, .btn, .btn-primary {
+            border-radius: var(--radius-button);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover, .btn:hover, .btn-primary:hover {
+            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
+        }
+
+        /* BOTÃO PRIMÁRIO: Verde principal */
+        .btn-primary, button[type="submit"] {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover, button[type="submit"]:hover {
+            background: var(--secondary-green);
+        }
+
+        /* CARDS GERAIS: Bordas arredondadas e sombras */
+        .card, .panel, .info-card {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .card:hover, .panel:hover, .info-card:hover {
+            box-shadow: var(--shadow-card);
+        }
+
+/* ============================================================================
+   MOBILE RESPONSIVO - NAVEGAÇÃO ESTILO WHATSAPP
+   ============================================================================ */
+
+/* Navegação mobile - escondida por padrão */
+.mobile-navigation {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Esconder layout desktop */
+    .container {
+        display: none !important;
+    }
+    
+    /* Mostrar navegação mobile */
+    .mobile-navigation {
+        display: block !important;
+        height: 100vh;
+        background: var(--white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        z-index: 9999;
+    }
+}
+
+
+    
+    /* ===== ESTRUTURA DAS TELAS ===== */
+    .mobile-screen {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--white);
+    }
+    
+    /* ===== TELA 1: LISTA DE CONVERSAS ===== */
+    .mobile-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .mobile-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .mobile-header-actions {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .mobile-header-actions button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-search-bar {
+        padding: 15px 20px;
+        background: var(--gray-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .mobile-search-bar i {
+        color: var(--text-secondary);
+    }
+    
+    .mobile-search-bar input {
+        flex: 1;
+        border: none;
+        background: var(--white);
+        padding: 10px;
+        border-radius: 20px;
+        outline: none;
+    }
+    
+    .mobile-conversations-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    /* ===== TELA 2: CHAT ===== */
+    .mobile-chat-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .mobile-back-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-chat-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-contact-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+    
+    .mobile-contact-status {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+    
+    .mobile-info-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-chat-messages {
+        flex: 1;
+        padding: 15px;
+        padding-bottom: 80px;
+        overflow-y: auto;
+        background: #e5ddd5;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-chat-input {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 15px;
+        background: var(--white);
+        border-top: 1px solid var(--border-light);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+    
+    .mobile-input-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .mobile-channel-icon {
+        font-size: 20px;
+        user-select: none;
+    }
+    
+    .mobile-channel-selector {
+        width: 48px;
+        height: 48px;
+        border: 2px solid white;
+        background: var(--primary-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        color: white;
+        box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
+    }
+    
+    .mobile-channel-selector:active {
+        transform: scale(0.95);
+        box-shadow: 0 1px 4px rgba(46, 125, 50, 0.6);
+    }
+    
+    .mobile-message-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid var(--border-light);
+        border-radius: 24px;
+        outline: none;
+        font-size: 16px;
+        background: #f1f3f4;
+        resize: none;
+        min-height: 24px;
+        max-height: 120px;
+        line-height: 24px;
+        box-sizing: border-box;
+    }
+    
+    .mobile-message-input:focus {
+        border-color: var(--primary-green);
+        background: white;
+    }
+    
+    .mobile-send-btn {
+        width: 48px;
+        height: 48px;
+        background: var(--primary-green);
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
+    }
+    
+    .mobile-send-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 1px 4px rgba(46, 125, 50, 0.6);
+    }
+    
+    /* Dropdown dos canais mobile */
+    .mobile-channel-dropdown {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+        min-width: 160px;
+        z-index: 1000;
+        display: none;
+        overflow: hidden;
+    }
+    
+    .mobile-channel-dropdown.show {
+        display: block;
+        animation: slideUp 0.2s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .mobile-channel-option {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f0f0f0;
+        background: white;
+    }
+    
+    .mobile-channel-option:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-channel-option:active {
+        background: #f0f0f0;
+        transform: scale(0.98);
+    }
+    
+    .mobile-channel-option.active {
+        background: #e3f2fd;
+        border-left: 4px solid var(--primary-green);
+    }
+    
+    .mobile-channel-option i {
+        font-size: 20px;
+        margin-right: 12px;
+        width: 24px;
+        text-align: center;
+    }
+    
+    .mobile-channel-option .name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .mobile-channel-option.active .name {
+        font-weight: 600;
+        color: var(--primary-green);
+    }
+    
+    /* ===== TELA 3: INFORMAÇÕES ===== */
+    .mobile-info-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .mobile-info-header span {
+        font-weight: 600;
+        font-size: 18px;
+    }
+    
+    .mobile-tabs {
+        display: flex;
+        background: var(--white);
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .mobile-tab {
+        flex: 1;
+        padding: 15px;
+        background: none;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-tab.active {
+        color: var(--primary-green);
+        border-bottom-color: var(--primary-green);
+    }
+    
+    .mobile-tab-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .mobile-tab-pane {
+        display: none;
+        padding: 20px;
+    }
+    
+    .mobile-tab-pane.active {
+        display: block;
+    }
+    
+    .mobile-info-content h4 {
+        margin: 0 0 15px 0;
+        color: var(--text-dark);
+        font-size: 16px;
+    }
+    
+    /* ===== ELEMENTOS DINÂMICOS MOBILE ===== */
+    
+    /* Lista de conversas */
+    .mobile-conversation-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        position: relative;
+    }
+    
+    .mobile-conversation-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .mobile-conversation-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        margin-right: 15px;
+        position: relative;
+    }
+    
+    .mobile-conversation-status {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+    
+    .mobile-conversation-status.status-online {
+        background: #22c55e;
+    }
+    
+    .mobile-conversation-status.status-away {
+        background: #f59e0b;
+    }
+    
+    .mobile-conversation-status.status-offline {
+        background: #6b7280;
+    }
+    
+    .mobile-conversation-info {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .mobile-conversation-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+    }
+    
+    .mobile-conversation-preview {
+        font-size: 14px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .mobile-conversation-preview i {
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .mobile-conversation-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+    
+    .mobile-conversation-time {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+    
+    .mobile-unread-badge {
+        background: var(--primary-green);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    
+    /* Mensagens do chat mobile - estilo WhatsApp */
+    .mobile-message {
+        margin-bottom: 8px;
+        max-width: 75%;
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        clear: both;
+    }
+    
+    .mobile-message-received {
+        align-self: flex-start;
+        margin-right: auto;
+        margin-left: 0;
+    }
+    
+    .mobile-message-sent {
+        align-self: flex-end;
+        margin-left: auto;
+        margin-right: 0;
+    }
+    
+    .mobile-message-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+        font-size: 12px;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        width: fit-content;
+    }
+    
+    .mobile-message-header i {
+        font-size: 14px;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    }
+    
+    .mobile-message-channel {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mobile-message-sent .mobile-message-header {
+        align-self: flex-end;
+        background: rgba(46, 125, 50, 0.9);
+        color: white;
+    }
+    
+    .mobile-message-received .mobile-message-header {
+        align-self: flex-start;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+    }
+    
+    /* Cores específicas por canal - bem visíveis */
+    .mobile-message-header[data-channel="whatsapp"] {
+        background: rgba(37, 211, 102, 0.9) !important;
+        border: 2px solid #25d366;
+    }
+    
+    .mobile-message-header[data-channel="email"] {
+        background: rgba(59, 130, 246, 0.9) !important;
+        border: 2px solid #3b82f6;
+    }
+    
+    .mobile-message-header[data-channel="webchat"] {
+        background: rgba(124, 58, 237, 0.9) !important;
+        border: 2px solid #7c3aed;
+    }
+    
+    .mobile-message-header[data-channel="instagram"] {
+        background: rgba(225, 48, 108, 0.9) !important;
+        border: 2px solid #e1306c;
+    }
+    
+    .mobile-message-content {
+        padding: 8px 12px;
+        border-radius: 7.5px;
+        font-size: 14px;
+        line-height: 1.4;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mobile-message-received .mobile-message-content {
+        background: white;
+        color: #303030;
+        border-bottom-left-radius: 2px;
+    }
+    
+    .mobile-message-sent .mobile-message-content {
+        background: #dcf8c6;
+        color: #303030;
+        border-bottom-right-radius: 2px;
+    }
+    
+    .mobile-message-time {
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.45);
+        margin-top: 2px;
+        text-align: right;
+        margin-right: 4px;
+    }
+    
+    .mobile-message-sent .mobile-message-time {
+        color: rgba(0, 0, 0, 0.45);
+    }
+    
+    /* Informações do cliente mobile */
+    .mobile-client-basic-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .mobile-client-basic-info p {
+        margin: 8px 0;
+        font-size: 14px;
+    }
+    
+    .mobile-notes-section h5 {
+        margin: 20px 0 10px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+    
+    .mobile-kpis {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+    }
+    
+    .mobile-kpi-item {
+        text-align: center;
+    }
+    
+    .mobile-kpi-value {
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-green);
+    }
+    
+    .mobile-kpi-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+    
+    .mobile-history-list {
+        margin-top: 15px;
+    }
+    
+    .mobile-history-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    /* ===== AJUSTES RESPONSIVOS DENTRO DO MOBILE ===== */
+    
+    /* Telas muito pequenas (iPhone SE, etc) */
+    @media (max-width: 375px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 44px !important;
+            height: 44px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 18px !important;
+        }
+        
+        .mobile-message-input {
+            font-size: 15px !important;
+            padding: 10px 14px !important;
+        }
+        
+        .mobile-chat-input {
+            padding: 8px 12px !important;
+        }
+        
+        .mobile-input-row {
+            gap: 6px !important;
+        }
+    }
+    
+    /* Telas médias (iPhone 12, 13, etc) */
+    @media (min-width: 376px) and (max-width: 428px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 46px !important;
+            height: 46px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 19px !important;
+        }
+    }
+    
+    /* Telas grandes (iPhone Plus, Android grandes) */
+    @media (min-width: 429px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 48px !important;
+            height: 48px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 20px !important;
+        }
+    }
+
+
+
+
+/* Desktop: Esconder navegação mobile */
+@media (min-width: 769px) {
+    .mobile-navigation {
+        display: none !important;
+    }
+}
